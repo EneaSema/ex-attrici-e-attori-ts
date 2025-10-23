@@ -43,3 +43,56 @@ type Actress = Person & {
     | "South Korean"
     | "Chinese";
 };
+
+// 📌 Milestone 3
+// Crea una funzione getActress che, dato un id, effettua una chiamata a:
+
+// GET /actresses/:id
+// La funzione deve restituire l’oggetto Actress, se esiste, oppure null se non trovato.
+
+// Utilizza un type guard chiamato isActress per assicurarti che la struttura del dato ricevuto sia corretta.
+
+function isActress(dati: unknown): dati is Actress {
+  return (
+    typeof dati === "object" &&
+    dati !== null &&
+    "id" in dati &&
+    typeof dati.id === "number" && // id property
+    "name" in dati &&
+    typeof dati.name === "string" && // name property
+    "birth_year" in dati &&
+    typeof dati.birth_year === "number" && // birth_year property
+    "death_year" in dati &&
+    typeof dati.death_year === "number" && // death_year property
+    "biography" in dati &&
+    typeof dati.biography === "string" && // biography property
+    "image" in dati &&
+    typeof dati.image === "string" && // image property
+    "most_famous_movies" in dati &&
+    dati.most_famous_movies instanceof Array &&
+    dati.most_famous_movies.length === 3 &&
+    dati.most_famous_movies.every((m) => typeof m === "string") &&
+    "awards" in dati &&
+    typeof dati.awards === "string" && // awards property
+    "nationality" in dati &&
+    typeof dati.nationality === "string" // nationality property
+  );
+}
+
+async function getActress(id: number): Promise<Actress | null> {
+  try {
+    const resp = await fetch(`http://localhost:3333/actress/${id}`);
+    const dati: unknown = await resp.json();
+    if (!isActress(dati)) {
+      throw new Error(" Formato dati non valido");
+    }
+    return dati;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Errore durante il recupero deell' attrice", error);
+    } else {
+      console.error("Errore sconosciuto:", error);
+    }
+    return null;
+  }
+}
