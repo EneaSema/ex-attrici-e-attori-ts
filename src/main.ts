@@ -82,6 +82,9 @@ function isActress(dati: unknown): dati is Actress {
 async function getActress(id: number): Promise<Actress | null> {
   try {
     const resp = await fetch(`http://localhost:3333/actress/${id}`);
+    if (!resp.ok) {
+      throw new Error(`Errore HTTP ${resp.status}: ${resp.statusText}`);
+    }
     const dati: unknown = await resp.json();
     if (!isActress(dati)) {
       throw new Error(" Formato dati non valido");
@@ -89,10 +92,40 @@ async function getActress(id: number): Promise<Actress | null> {
     return dati;
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Errore durante il recupero deell' attrice", error);
+      console.error("Errore durante il recupero dell' attrice", error);
     } else {
       console.error("Errore sconosciuto:", error);
     }
     return null;
+  }
+}
+
+// 📌 Milestone 4
+// Crea una funzione getAllActresses che chiama:
+
+// GET /actresses
+// La funzione deve restituire un array di oggetti Actress.
+
+// Può essere anche un array vuoto.
+
+async function getAllActresses(): Promise<Actress[]> {
+  try {
+    const resp = await fetch(`http://localhost:3333/actresses`);
+    if (!resp.ok) {
+      throw new Error(`Errore HTTP ${resp.status}: ${resp.statusText}`);
+    }
+    const dati: unknown = await resp.json();
+    if (!(dati instanceof Array)) {
+      throw new Error(`Formato dei dati non valido: non è un array!`);
+    }
+    const attriciValide: Actress[] = dati.filter(isActress);
+    return attriciValide;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Errore durante il recupero delle attrici", error);
+    } else {
+      console.error("Errore sconosciuto:", error);
+    }
+    return [];
   }
 }
