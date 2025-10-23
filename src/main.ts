@@ -152,3 +152,41 @@ async function getActresses(ids: number[]): Promise<(Actress | null)[]> {
     return [];
   }
 }
+
+// 🎯 BONUS 1
+// Crea le funzioni:
+
+// createActress
+// updateActress
+// Utilizza gli Utility Types:
+
+// Omit: per creare un'attrice senza passare id, che verrà generato casualmente.
+// Partial: per permettere l’aggiornamento di qualsiasi proprietà tranne id e name.
+
+function createActress(data: Omit<Actress, "id">): Actress {
+  return {
+    ...data,
+    id: Math.floor(Math.random() * 10000),
+  };
+}
+
+function updateActress(actress: Actress, updates: Partial<Actress>): Actress {
+  return {
+    ...actress,
+    ...updates,
+    id: actress.id,
+    name: actress.name,
+  };
+}
+
+// 🎯 BONUS 2
+// Crea un tipo Actor, che estende Person con le seguenti differenze rispetto ad Actress:
+
+// known_for: una tuple di 3 stringhe
+// awards: array di una o due stringhe
+// nationality: le stesse di Actress più:
+// Scottish, New Zealand, Hong Kong, German, Canadian, Irish.
+// Implementa anche le versioni getActor, getAllActors, getActors, createActor, updateActor.
+
+// 🎯 BONUS 3
+// Crea la funzione createRandomCouple che usa getAllActresses e getAllActors per restituire un’array che ha sempre due elementi: al primo posto una Actress casuale e al secondo posto un Actor casuale.
