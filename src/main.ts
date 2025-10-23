@@ -188,5 +188,63 @@ function updateActress(actress: Actress, updates: Partial<Actress>): Actress {
 // Scottish, New Zealand, Hong Kong, German, Canadian, Irish.
 // Implementa anche le versioni getActor, getAllActors, getActors, createActor, updateActor.
 
+type Actor = Person & {
+  known_for: [string, string, string];
+  awards: [string] | [string, string];
+  nationality:
+    | "American"
+    | "British"
+    | "Australian"
+    | "Israeli-American"
+    | "South African"
+    | "French"
+    | "Indian"
+    | "Israeli"
+    | "Spanish"
+    | "South Korean"
+    | "Chinese"
+    | "Scottish"
+    | "New Zealand"
+    | "Hong Kong"
+    | "German"
+    | "Canadian"
+    | "Irish";
+};
+
+function isPerson(dati: unknown): dati is Person {
+  return (
+    typeof dati === "object" &&
+    dati !== null &&
+    "id" in dati &&
+    typeof dati.id === "number" && // id property
+    "name" in dati &&
+    typeof dati.name === "string" && // name property
+    "birth_year" in dati &&
+    typeof dati.birth_year === "number" && // birth_year property
+    "death_year" in dati &&
+    typeof dati.death_year === "number" && // death_year property
+    "biography" in dati &&
+    typeof dati.biography === "string" && // biography property
+    "image" in dati &&
+    typeof dati.image === "string" // image property
+  );
+}
+
+function isActor(dati: unknown): dati is Actor {
+  return (
+    isPerson(dati) &&
+    "known_for" in dati &&
+    dati.known_for instanceof Array &&
+    dati.known_for.length === 3 &&
+    dati.known_for.every((m) => m === "string") &&
+    "awards" in dati &&
+    dati.awards instanceof Array &&
+    (dati.awards.length === 1 || dati.awards.length === 2) &&
+    dati.awards.every((m) => m === "string") &&
+    "nationality" in dati &&
+    typeof dati.nationality === "string"
+  );
+}
+
 // 🎯 BONUS 3
 // Crea la funzione createRandomCouple che usa getAllActresses e getAllActors per restituire un’array che ha sempre due elementi: al primo posto una Actress casuale e al secondo posto un Actor casuale.
