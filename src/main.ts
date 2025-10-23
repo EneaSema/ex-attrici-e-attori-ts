@@ -303,5 +303,21 @@ async function getActors(ids: number[]): Promise<(Actor | null)[]> {
   }
 }
 
+function createActors(data: Omit<Actor, "id">): Actor {
+  return {
+    ...data,
+    id: Math.floor(Math.random() * 10000),
+  };
+}
+
+function updateActors(actor: Actor, updates: Partial<Actor>): Actor {
+  return {
+    ...actor,
+    ...updates,
+    id: actor.id,
+    name: actor.name,
+  };
+}
+
 // 🎯 BONUS 3
 // Crea la funzione createRandomCouple che usa getAllActresses e getAllActors per restituire un’array che ha sempre due elementi: al primo posto una Actress casuale e al secondo posto un Actor casuale.
